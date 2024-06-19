@@ -24,7 +24,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>Academic Project Page</title>
+  <title>Image Matching: Structure from Motion</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
@@ -52,22 +52,26 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Academic Project Page</h1>
+            <h1 class="title is-1 publication-title">Image Matching: Structure from Motion</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">First Author</a><sup>*</sup>,</span>
+                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Bhavani A Madhabhavi</a>
+                <!-- <sup>*</sup>, -->
+              ,</span>
                 <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Second Author</a><sup>*</sup>,</span>
-                  <span class="author-block">
+                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Akshay Kiran Jose</a>
+                  <!-- <sup>*</sup>, -->
+                </span>
+                  <!-- <span class="author-block">
                     <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Third Author</a>
-                  </span>
+                  </span> -->
                   </div>
 
-                  <div class="is-size-5 publication-authors">
+                  <!-- <div class="is-size-5 publication-authors">
                     <span class="author-block">Institution Name<br>Conferance name and year</span>
                     <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
-                  </div>
+                  </div> -->
 
                   <div class="column has-text-centered">
                     <div class="publication-links">
@@ -127,13 +131,15 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video poster="" id="tree" autoplay controls muted loop height="100%">
-        <!-- Your video here -->
+      <!-- <video poster="" id="tree" autoplay controls muted loop height="100%">
         <source src="static/videos/banner_video.mp4"
         type="video/mp4">
-      </video>
+      </video> -->
       <h2 class="subtitle has-text-centered">
-        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
+         We devise/improve upon an algorithm that estimates a three-dimensional structure from two-dimensional image sequences. 
+         Multiple photographs of an object taken from different angles and at varying distances are analyzed and matched to estimate 
+         the 3D structure of the object. Matching many images across different viewpoints to reconstruct a 3D model of an environment 
+         from a collection of images is a computer vision problem known as <b> Structure from Motion (SfM).</b>
       </h2>
     </div>
   </div>
@@ -148,7 +154,18 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
+             The typical steps that are involved in estimating structure 
+             from motion are: i) extraction of image embeddings, ii) key point detection 
+             and matching, iii) rotation correction (if needed), iv) triangulation and 
+             v) bundle adjustment. We explore model ensembling techniques for image 
+             embedding extraction and for keypoint detection and matching in order to 
+             utilize the capabilities of the models to capture the various details in 
+             an image while improving the overall accuracy of reconstruction. We experiment 
+             with different models and hyperparameters and orientation correction to obtain 
+             the best combination for SfM. Since this algorithm was devised as part of 
+             the <u><a href="https://www.kaggle.com/competitions/image-matching-challenge-2024/overview" style="color:#0800ff;" target="_blank">Kaggle Image Matching Challenge 2024</a></u>, the code executes within 9 hours on 
+             a GPU and was optimized to obtain the highest accuracy for the task among the 
+             many variations tested.
           </p>
         </div>
       </div>
@@ -164,31 +181,33 @@
     <div class="container">
       <div id="results-carousel" class="carousel results-carousel">
        <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel1.jpg" alt="MY ALT TEXT"/>
+        <img src="static/images/00001.png" alt="MY ALT TEXT"/>
         <h2 class="subtitle has-text-centered">
-          First image description.
         </h2>
       </div>
       <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel2.jpg" alt="MY ALT TEXT"/>
+        <img src="static/images/00010.png" alt="MY ALT TEXT"/>
         <h2 class="subtitle has-text-centered">
-          Second image description.
         </h2>
       </div>
       <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel3.jpg" alt="MY ALT TEXT"/>
+        <img src="static/images/00030.png" alt="MY ALT TEXT"/>
         <h2 class="subtitle has-text-centered">
-         Third image description.
        </h2>
      </div>
      <div class="item">
-      <!-- Your image here -->
-      <img src="static/images/carousel4.jpg" alt="MY ALT TEXT"/>
+      <img src="static/images/00042.png" alt="MY ALT TEXT"/>
       <h2 class="subtitle has-text-centered">
-        Fourth image description.
+      </h2>
+    </div>
+    <div class="item">
+      <img src="static/images/00066.png" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-centered">
+      </h2>
+    </div>
+    <div class="item">
+      <img src="static/images/00111.png" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-centered">
       </h2>
     </div>
   </div>
