@@ -43,6 +43,23 @@
   <script src="static/js/bulma-carousel.min.js"></script>
   <script src="static/js/bulma-slider.min.js"></script>
   <script src="static/js/index.js"></script>
+
+  <style>
+    table {
+        width: 75%;
+        border-collapse: collapse; /* Collapse borders into a single border */
+        border: 1px solid #000; /* Border around the table */
+    }
+    th, td {
+        border: 1px solid #000; /* Border for table cells */
+        padding: 8px; /* Padding inside cells for content */
+        text-align: left; /* Align text to the left within cells */
+    }
+    th {
+        background-color: #f2f2f2; /* Background color for table header cells */
+    }
+</style>
+
 </head>
 <body>
 
@@ -56,11 +73,11 @@
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Bhavani A Madhabhavi</a>
+                <a href="https://www.linkedin.com/in/bhavaniam/" target="_blank">Bhavani A Madhabhavi</a>
                 <!-- <sup>*</sup>, -->
               ,</span>
                 <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Akshay Kiran Jose</a>
+                  <a href="https://www.linkedin.com/in/akshaykiranjose/" target="_blank">Akshay Kiran Jose</a>
                   <!-- <sup>*</sup>, -->
                 </span>
                   <!-- <span class="author-block">
@@ -227,18 +244,26 @@
   <div class="hero-body">
     <div class="container">
       <!-- Paper video. -->
-      <!-- <h2 class="title is-3">Video Presentation</h2> -->
-      <div class="columns is-centered">
-        <div class="column is-four-fifths">
-          The images displayed above are some examples from one of the categories of the test dataset. 
-          The multiple images taken from various viewpoints are used to reconstruct the 3D model of 
-          the actual object. There are two resolutions of images that are present in the testset 
-          category: 1024 x 768 pixels and 768 x 1024 pixels. 
+      <h2 class="title is-3">Dataset</h2>
+      <!-- <div class="columns"> -->
+        <!-- <div class="column is-four-fifths"> -->
+          The training data contains different classes with their respective images and the 3-D reconstructions
+          for the images, which can be opened with colmap. The training labels are: 
+          i) dataset, ii) scene, iii) image_path, iv) rotation_matrix and v) the translation_vector. 
+          The test data contains only the images for each class. The inferencing of the model is done 
+          on the test dataset. 
+          <br>
+          The images displayed in the above section are examples taken from one of the classes in the test data. 
+          The multiple images taken from various viewpoints are used to reconstruct the 3D model of the actual 
+          object and to accurately pose (obtain the rotation matrix and translation vector of the camera's position) 
+          the images. There are two resolutions of images present in the dataset: 1024 x 768 pixels (landscape) 
+          and 768 x 1024 pixels (portrait). 
+
           <!-- <div class="publication-video">
             <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
           </div> -->
-        </div>
-      </div>
+        <!-- </div> -->
+      <!-- </div> -->
     </div>
   </div>
 </section>
@@ -249,48 +274,133 @@
 <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title is-3">Another Carousel</h2>
-      <div id="results-carousel" class="carousel results-carousel">
+      <h2 class="title is-3">Algorithm</h2>
+      <h3><b>1) Feature Extraction and finding similar image pairs</b></h3>
+      The purpose of the task is to compute global descriptors (feature representations such as image embeddings) for images using a deep learning model, 
+      then generate pairs of images based on the similarity of these descriptors. We use a pre-trained deep learning model (tf_efficientnet_b7) to extract
+      features from the input images. The descriptors are normalized using L2 normalization to ensure that each descriptor vector has a unit norm, which 
+      can improve the robustness and effectiveness of subsequent similarity calculations. The pairwise distances are computed on these descriptors to 
+      extract pairs of images that are most similar to each other. 
+      <br>
+      <br>
+      <h3><b>2) Keypoint detection</b></h3>
+      Keypoints are spatial locations in an image that represent regions of an image that are unique and can be robustly matched across different images 
+      under various transformations such as changes in viewpoint, scale, rotation, and illumination. We want to identify these informative points within 
+      an image as they serve as landmarks or reference points to establish correspondences between different images for image matching. We match 
+      keypoints and descriptors between pairs of images using the LightGlue algorithm (ALIKED).
+      <br>
+      <br>
+      <h3><b>3) Keypoint merger</b></h3>
+      Combining keypoints and matches from multiple images or sources into a unified dataset is necessary when using multiple keypoint detection and 
+      matching algorithms as each algorithm may detect different sets of keypoints due to variations in their detection methods, sensitivity to 
+      different image features, and robustness to different image conditions. By merging keypoints and matches from multiple algorithms or datasets, 
+      we obtain a more complete representation of the scene or object being analyzed. Since our algorithm uses DoGHardNet and ALIKED, we include a 
+      keypoint merger. 
+      <br>
+      <br>
+      <h3><b>4) Calculate the fundamental matrix</b></h3>
+      Matches between keypoints can contain outliers due to factors like noise, occlusion, or mismatches. We employ RANSAC to remove the outliers 
+      between the keypoint matches. RANSAC randomly selects a minimal subset of matches to estimate the initial matrix parameters. All the matches 
+      are then evaluated against the estimated matrix and are classified as inliers and outliers. After several iterations, RANSAC selects the matrix 
+      with the highest number of inliers. This matrix is then refined using all inlier matches to obtain a more accurate estimate of the transformation 
+      parameters. The final matrix is known as the fundamental matrix.
+      <br>
+      <br>
+      <h3><b>5) Bundle adjustment</b></h3>
+      Upon obtaining the keypoint matches without outliers, we use pycolmap, which offers an incremental reconstruction algorithm that starts from two 
+      pairs of images and continually adds more and more images to the scene, resulting in a reconstructed scene with camera information (translation 
+      vector and rotation matrix). 
+
+      We further perform bundle adjustment to optimize camera parameters and 3D point positions based on observed image data to refine the 3D 
+      reconstructed models. Its primary goal is to minimize the reprojection error, which is the difference between the observed 2D keypoints in images 
+      and their corresponding projections from the estimated 3D structure.
+
+
+      <!-- <div id="results-carousel" class="carousel results-carousel">
         <div class="item item-video1">
           <video poster="" id="video1" autoplay controls muted loop height="100%">
-            <!-- Your video file here -->
             <source src="static/videos/carousel1.mp4"
             type="video/mp4">
           </video>
         </div>
         <div class="item item-video2">
           <video poster="" id="video2" autoplay controls muted loop height="100%">
-            <!-- Your video file here -->
             <source src="static/videos/carousel2.mp4"
             type="video/mp4">
           </video>
         </div>
         <div class="item item-video3">
           <video poster="" id="video3" autoplay controls muted loop height="100%">\
-            <!-- Your video file here -->
             <source src="static/videos/carousel3.mp4"
             type="video/mp4">
           </video>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </section>
 <!-- End video carousel -->
 
 
-
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Experiments</h2>
+      We performed multiple experiments on the algorithm such as model ensembling, orientation detection and hyperparameter tuning.
+      We detail the change in performance of the overall algorithm on the held out testset for every experiment in the 
+      table below with the corresponding changes to the model/algorithm.
+      
+      <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Score obtained</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Baseline (DinoV2. Image size 1024. ALIKED. 4196 features)</td>
+                <td>0.119</td>
+            </tr>
+            <tr>
+                <td>Ensemble of Dinov2, Swinv2 tiny, ViT. Image size 1024 &rarr; 1280. ALIKED. 4196 features</td>
+                <td>0.129</td>
+            </tr>
+            <tr>
+                <td>Ensemble of Dinov2, Swinv2 tiny, ViT. Image size 1280. ALIKED. Features 4196 &rarr; 8192 </td>
+                <td>0.131</td>
+            </tr>
+            <tr>
+              <td>tf_efficientnet_b7. Image size 1280. ALIKED. 8192 features </td>
+              <td>0.139</td>
+            </tr>
+            <tr>
+              <td>tf_efficientnet_b7. Image size 1280 &rarr; 1600. ALIKED + DoGHardNet ensemble. 8192 features</td>
+              <td>0.147</td>
+            </tr>
+            <tr>
+              <td>tf_efficientnet_b7. Image size 1600 &rarr; 1920. ALIKED + DoGHardNet ensemble. 8192 features. min_matches 15 &rarr; 10</td>
+              <td>0.161</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    </div>
+  </div>
+</section>
 
 
 
 <!-- Paper poster -->
-<section class="hero is-small is-light">
+<section class="hero is-small">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title">Poster</h2>
+      <h2 class="title">Conclusion</h2>
+        To summarize, we work on improving a solution to the structure-from-motion problem to reconstruct 
+        3D models from multiple 2D images that are taken from various viewpoints and in different settings. 
 
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
+      <!-- <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
+          </iframe> -->
         
       </div>
     </div>
@@ -299,12 +409,12 @@
 
 
 <!--BibTex citation -->
-  <section class="section" id="BibTeX">
+  <!-- <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <pre><code>BibTex Code Here</code></pre>
     </div>
-</section>
+</section> -->
 <!--End BibTex citation -->
 
 
@@ -316,10 +426,7 @@
 
           <p>
             This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-            You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
           </p>
-
         </div>
       </div>
     </div>
