@@ -384,7 +384,24 @@
             </tr>
         </tbody>
     </table>
-    
+    <br>
+    <b>Baseline:</b> The baseline algorithm uses a single model to extract image embeddings (DinoV2) and a single model for 
+    feature extraction (LightGlue ALIKED). 
+    <br>
+    <br>
+    <b>An increase in the image size:</b> Although a higher image resolution improves the score of the algorithm, it affects 
+    the runtime and the complexity of our model (more multiplications to run the same model for a higher image resolution). 
+    <br>
+    <br>
+    <b>More features considered in keypoint matching:</b> Increasing the number of features that are to be detected in the images 
+    naturally increases the runtime of the algorithm. However, it does make the algorithm robust since we are increasing the 
+    number of unique points that are being considered in each image, which makes it easier for the network to identify the 
+    said object/location in the image.
+    <br>
+    <br>
+    <b>Ensembling:</b> We experiment with/utilize model ensembling to extract image embeddings and for keypoint detection. While one 
+    model might not be able to effectively capture the nuances in the images, using multiple models ensures that we leverage 
+    the independent capabilities of the models and combine them to capture the details from the images, necessary for the task. 
     </div>
   </div>
 </section>
